@@ -13,7 +13,8 @@ dataset_train_dutch_f="/home/surya/Documents/sigcom11/OfflineSignatures/Dutch/Tr
 dataset_train_chinese_g="/home/surya/Documents/sigcom11/OfflineSignatures/Chinese/TrainingSet/Offline Genuine"
 dataset_train_chinese_f="/home/surya/Documents/sigcom11/OfflineSignatures/Chinese/TrainingSet/Offline Forgeries"
 dataset_train_09="/home/surya/Documents/sigcom09/SigComp2009-training/NISDCC-offline-all-001-051-6g"
-
+# directories for features
+dataset_dir_f="/home/surya/Documents/signature_features"
 
 def create_dirs(dir_n, dataset_dir):
 
@@ -35,6 +36,23 @@ def create_dirs(dir_n, dataset_dir):
                 os.makedirs(crntg)
             if not os.path.exists(crntf):
                 os.makedirs(crntf)
+    return
+
+def create_fdirs():
+    
+    """ Used to create directories for features """
+
+    mypath = dataset_dir_f
+    direcs = [join(mypath,f) for f in listdir(mypath)]
+    for dr in direcs:
+        rmtree(dr)
+    crntg = os.path.join(mypath,"genuine")
+    crntf = os.path.join(mypath,"forge")
+    if not os.path.exists(crntg):
+        os.makedirs(crntg)
+    if not os.path.exists(crntf):
+        os.makedirs(crntf)
+    return
 
 #fills only 16 dutch and 10 chinese  ids from 2011 and 12 ids from 2009
 def fill_dir_train():
