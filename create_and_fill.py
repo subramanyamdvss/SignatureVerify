@@ -1,4 +1,6 @@
 
+
+
 import os
 from shutil import copy,rmtree
 from os import listdir
@@ -15,6 +17,8 @@ dataset_train_chinese_f="/home/surya/Documents/sigcom11/OfflineSignatures/Chines
 dataset_train_09="/home/surya/Documents/sigcom09/SigComp2009-training/NISDCC-offline-all-001-051-6g"
 # directories for features
 dataset_dir_f="/home/surya/Documents/signature_features"
+dataset_eval="/home/surya/Documents/sigcom09/SigComp2009-evaluation"
+dataset_new_eval="/home/surya/Documents/signature_eval"
 
 def create_dirs(dir_n, dataset_dir):
 
@@ -38,7 +42,7 @@ def create_dirs(dir_n, dataset_dir):
                 os.makedirs(crntf)
     return
 
-def create_fdirs():
+def create_fdirs(dataset_dir_f):
     
     """ Used to create directories for features """
 
@@ -83,7 +87,7 @@ def fill_dir_train():
         dcd = int(f[4:7])
         copy(fpath,join(dataset_dir,("id_%d/forge") %(16+dcd)))
 #for dataset train 09
-    mypath=dataset_train_09
+    mypath = dataset_train_09
     onlyfiles = [(f,join(mypath,f)) for f in listdir(mypath) if isfile(join(mypath, f))]
     for f,fpath in onlyfiles:
         dcd = int(f[7:10])
@@ -95,31 +99,30 @@ def fill_dir_train():
 
 
 #############incomplete
-def fill_dir_eval(src):
-    mypath=src
+def fill_dir_eval():
+    
+    
+    #for eval genuine
+    mypath = join(dataset_eval,"genuines")
     onlyfiles = [(f,join(mypath,f)) for f in listdir(mypath) if isfile(join(mypath, f))]
-    onlyfiles=sorted(onlyfiles)
-    print (int(onlyfiles[1][0][4:7]))
-
-    # for f in onlyfiles:
-    #     tmp=int(f[4:7])
-    #     if i!=tmp:
-    #         while i!=tmp:
-    #             missingid.append(i)
-    #             i+=1
-
-    #     if i==tmp:
-    #         i+=1
-    # if len(missingid)==940:
-    #     print ("you won")
-    # else:
-    #     print ("you lose")
+    for f,fpath in onlyfiles:
+        dcd = int(f[4:7])
+        copy(fpath,join(dataset_new_eval,("id_%d/genuine") %(dcd)))
+    #for eval forge
+    mypath = join(dataset_eval,"forgeries")
+    onlyfiles = [(f,join(mypath,f)) for f in listdir(mypath) if isfile(join(mypath, f))]
+    print len(onlyfiles)
+    for f,fpath in onlyfiles:
+        print f
+        dcd = int(f[9:12])
+        copy(fpath,join(dataset_new_eval,("id_%d/forge") %(dcd)))
+    
+    return
 
 
-# dataset_eval="/home/surya/Documents/sigcom09/SigComp2009-evaluation/genuines"
 # fill_dir_eval(dataset_eval)
-create_dirs(38, dataset_dir)
-fill_dir_train()
+create_dirs(100, dataset_new_eval)
+fill_dir_eval()
 
 
 

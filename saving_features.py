@@ -1,3 +1,6 @@
+
+
+
 import tensorflow as tf
 import cv2
 slim = tf.contrib.slim
@@ -17,8 +20,10 @@ checkpoint_file = '/home/surya/Documents/inception_resnet_v2_2016_08_30.ckpt'
 dataset_dir="/home/surya/Documents/signature"
 # path to your new dataset for features.
 dataset_dir_new="/home/surya/Documents/signature_features"
+#number of ids
+n_id=38
 #call to create new dataset
-create_fdirs()
+create_fdirs("/home/surya/Documents/signature_features")
 
 
 
@@ -37,7 +42,7 @@ def creating_features(sess,logits,end_points,tmp,input_tensor):
 
         
 
-def merge_images(flag = True):
+def merge_images(n_id,dataset_dir,dataset_dir_new):
     
     numf=1
     numg=1
@@ -52,7 +57,7 @@ def merge_images(flag = True):
     saver.restore(sess, checkpoint_file)
     
     #used to produce forged comparisions
-    for i in range(1,39):
+    for i in range(1,n_id+1):
 
         for j,f1 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
 
@@ -89,7 +94,7 @@ def merge_images(flag = True):
                 numf+=1
 
     # used to produce genuine comparisions
-    for i in range(1,39):
+    for i in range(1,n_id+1):
 
         for j,f1 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
 
@@ -125,7 +130,7 @@ def merge_images(flag = True):
                     
 
 
-merge_images()
+merge_images(n_id,dataset_dir,dataset_dir_new)
 
 
 
