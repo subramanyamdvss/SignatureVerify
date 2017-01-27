@@ -20,10 +20,11 @@ checkpoint_file = '/home/surya/Documents/inception_resnet_v2_2016_08_30.ckpt'
 dataset_dir="/home/surya/Documents/signature"
 # path to your new dataset for features.
 dataset_dir_new="/home/surya/Documents/signature_features"
+
 #number of ids
 n_id=38
 #call to create new dataset
-create_fdirs("/home/surya/Documents/signature_features")
+# create_fdirs("/home/surya/Documents/signature_features")
 
 
 
@@ -44,7 +45,7 @@ def creating_features(sess,logits,end_points,tmp,input_tensor):
 
 def merge_images(n_id,dataset_dir,dataset_dir_new):
     
-    numf=1
+    numf=31637
     numg=1
 
     # Load the model
@@ -56,15 +57,13 @@ def merge_images(n_id,dataset_dir,dataset_dir_new):
     saver = tf.train.Saver()
     saver.restore(sess, checkpoint_file)
     
-    #used to produce forged comparisions
-    for i in range(1,n_id+1):
+    # used to produce forged comparisions
+    for i in range(27,n_id+1):
 
         for j,f1 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
 
             for k,f2 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/forge" %(i)))):
-                # to balance the dataset
-                if k>2*j :
-                    break
+                
                 f1p=os.path.join(dataset_dir,"id_%d/genuine" %(i))
                 f1p=os.path.join(f1p,f1)
                 f2p=os.path.join(dataset_dir,"id_%d/forge" %(i))
@@ -94,39 +93,40 @@ def merge_images(n_id,dataset_dir,dataset_dir_new):
                 numf+=1
 
     # used to produce genuine comparisions
-    for i in range(1,n_id+1):
+    # for i in range(1,n_id+1):
 
-        for j,f1 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
+    #     for j,f1 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
 
-            for k,f2 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
+    #         for k,f2 in enumerate(listdir(os.path.join(dataset_dir,"id_%d/genuine" %(i)))):
+
                 
-                f1p=os.path.join(dataset_dir,"id_%d/genuine" %(i))
-                f1p=os.path.join(f1p,f1)
-                f2p=os.path.join(dataset_dir,"id_%d/genuine" %(i))
-                f2p=os.path.join(f2p,f2)
-                im1 = cv2.imread(f1p)
-                im2 = cv2.imread(f2p)
-                im1gr = cv2.resize(cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY),(299,299))
-                im2gr = cv2.resize(cv2.cvtColor(im2, cv2.COLOR_BGR2GRAY),(299,299))
-                tmp1=np.dstack((im1gr,im2gr,np.zeros((299,299))))
-                tmp1 = 2*(tmp1/255.0)-1.0
+    #             f1p=os.path.join(dataset_dir,"id_%d/genuine" %(i))
+    #             f1p=os.path.join(f1p,f1)
+    #             f2p=os.path.join(dataset_dir,"id_%d/genuine" %(i))
+    #             f2p=os.path.join(f2p,f2)
+    #             im1 = cv2.imread(f1p)
+    #             im2 = cv2.imread(f2p)
+    #             im1gr = cv2.resize(cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY),(299,299))
+    #             im2gr = cv2.resize(cv2.cvtColor(im2, cv2.COLOR_BGR2GRAY),(299,299))
+    #             tmp1=np.dstack((im1gr,im2gr,np.zeros((299,299))))
+    #             tmp1 = 2*(tmp1/255.0)-1.0
                 
-                # images which are flipped left  right , up  down 
-                tmp1 = np.dstack((im1gr,im2gr,np.zeros((299,299))))
-                tmp2 = np.flipud(tmp1)
-                tmp3 = np.fliplr(tmp1)
-                tmp4 = np.fliplr(tmp2)
-                tmp=[tmp1,tmp2,tmp3,tmp4]
-                prelogitsg = creating_features(sess,logits,end_points,tmp,input_tensor)
-                crntg = join(dataset_dir_new,"genuine")
-                np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[0])
-                numg+=1
-                np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[1])
-                numg+=1
-                np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[2])
-                numg+=1
-                np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[3])
-                numg+=1
+    #             # images which are flipped left  right , up  down 
+    #             tmp1 = np.dstack((im1gr,im2gr,np.zeros((299,299))))
+    #             tmp2 = np.flipud(tmp1)
+    #             tmp3 = np.fliplr(tmp1)
+    #             tmp4 = np.fliplr(tmp2)
+    #             tmp=[tmp1,tmp2,tmp3,tmp4]
+    #             prelogitsg = creating_features(sess,logits,end_points,tmp,input_tensor)
+    #             crntg = join(dataset_dir_new,"genuine")
+    #             np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[0])
+    #             numg+=1
+    #             np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[1])
+    #             numg+=1
+    #             np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[2])
+    #             numg+=1
+    #             np.save(join(crntg,"g%d.npy") %(numg),prelogitsg[3])
+    #             numg+=1
                     
 
 
